@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { auth } from "./firebase";
+import { Login } from "./pages/Login";
+
+const Welcome = ({ user }: { user: { uid: string } }) => {
+  return (
+    <div>
+      <h1>Welcome {user.uid}</h1>
+    </div>
+  );
+};
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const [initialing, setInitialing] = useState(false);
+  const [user, setUser] = useState<{uid: string }>();
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      setInitialing(true)
+      if (user) {
+        setUser(user)
+      }
+      console.log("auth state changed", user);
+    })
+  }, [])
+  if (!initialing) {
+    return <div>Initialing...</div>
+  }
+  if (user) {
+    return <Welcome user={user} />;
+  } else {
+    return <Login />;
+  }
 }
 
-export default App
+export default App;
