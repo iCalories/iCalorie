@@ -41,7 +41,7 @@ export const Welcome = () => {
     setPhr(values);
   };
 
-  const handleGetDailyFoods = (setFoods: (foods: DailyFood[]) => void) => {
+  const handleGetDailyFoods = () => {
     if (!phr) return;
 
     const requestCompletion = httpsCallable<any, CompletionResult>(
@@ -59,7 +59,6 @@ export const Welcome = () => {
         const comp = res.data.choices[0].text;
         const result = JSON.parse(comp);
         console.log("get daily foods successfully", result);
-        setFoods(result.data);
         setDoc(doc(db, "DailyFoods", user.uid), result);
       })
       .catch((err) => {
@@ -80,14 +79,8 @@ export const Welcome = () => {
           <p>BMI: {getBMI(phr)}</p>
           <p>AF: {phr.activeFactor}</p>
           <p>TDEE: {getDailyCalories(phr)}</p>
-
-          <DailyFoods
-            renderFooter={({ setFoods }) => (
-              <Button onClick={() => handleGetDailyFoods(setFoods)}>
-                Get daily foods
-              </Button>
-            )}
-          />
+          <Button onClick={handleGetDailyFoods}>Get daily foods</Button>
+          <DailyFoods />
         </div>
       )}
     </div>

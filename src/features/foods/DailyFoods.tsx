@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { DailyFood } from "./DailyFood";
 import { useDailyFoods } from "./useDailyFoods";
 
@@ -25,17 +24,12 @@ export const Foods = ({ foods }: { foods: DailyFood[] }) => {
   );
 };
 
-export const DailyFoods = ({
-  renderFooter,
-}: {
-  renderFooter: (state: any) => ReactNode;
-}) => {
+export const DailyFoods = () => {
   const dailyFoods = useDailyFoods();
   return (
     <div>
       <h3>Daily Foods</h3>
       <Foods foods={dailyFoods.foods} />
-      {renderFooter(dailyFoods)}
     </div>
   );
 };

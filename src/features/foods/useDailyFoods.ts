@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRequiredUser } from "../auth/UserContext";
 import { DailyFood } from "./DailyFood";
 import { db } from "../../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 
 export const useDailyFoods = () => {
   const user = useRequiredUser();
@@ -10,14 +10,14 @@ export const useDailyFoods = () => {
   const [foods, setFoods] = useState<DailyFood[]>([]);
 
   useEffect(() => {
-    const loadFoods = async () => {
-      const docRef = doc(db, "DailyFoods", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setFoods(docSnap.data().data as DailyFood[]);
+    return onSnapshot(doc(db, "DailyFoods", user.uid), (doc) => {
+      console.log("Current data exists: ", doc.exists());
+      if (doc.exists()) {
+        setFoods(doc.data().data as DailyFood[]);
+      } else {
+        setFoods([]);
       }
-    };
-    loadFoods();
+    });
   }, []);
 
   return { foods, setFoods };
