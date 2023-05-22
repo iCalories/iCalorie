@@ -3,12 +3,12 @@ import { useDailyFoods } from "./useDailyFoods";
 
 export const Foods = ({ foods }: { foods: DailyFood[] }) => {
   return (
-    <p>
+    <div>
       {foods.map((food, index) => {
         return (
           <div key={index}>
-            <p>{food.day}</p>
-            <p>
+            <h3>{food.day}</h3>
+            <section>
               {food.meals.map((meal) => {
                 return (
                   <div key={meal.kind}>
@@ -16,11 +16,11 @@ export const Foods = ({ foods }: { foods: DailyFood[] }) => {
                   </div>
                 );
               })}
-            </p>
+            </section>
           </div>
         );
       })}
-    </p>
+    </div>
   );
 };
 
