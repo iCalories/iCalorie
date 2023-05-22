@@ -1,8 +1,16 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { Button } from "flowbite-react";
 
+const provider = new GoogleAuthProvider();
 
 export function Login() {
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, provider).catch((error) => {
+      console.log("error", error);
+    });
+  };
 
   return (
     <div className="w-full flex justify-center">
@@ -63,6 +71,9 @@ export function Login() {
         >
           Submit
         </button>
+        <Button className="mt-4" onClick={signInWithGoogle}>
+          SignInWithGoogle
+        </Button>
       </form>
     </div>
   );

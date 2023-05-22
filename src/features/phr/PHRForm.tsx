@@ -14,6 +14,7 @@ export function PHRForm({onSubmit}: PHRFormProps) {
       data.forEach((value, key) => {
         values[key] = Number(value)
       })
+      values.activeFactor = 1.2
       onSubmit(values as unknown as PersonalHealthRecord)
     }}>
       <div className="mb-6">

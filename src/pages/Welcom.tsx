@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
+import { doc, setDoc } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
+import { Button } from "flowbite-react";
 import { useRequiredUser } from "../features/auth/UserContext";
+import { DailyFoods } from "../features/foods/DailyFoods";
 import { PHRForm } from "../features/phr/PHRForm";
 import {
   PersonalHealthRecord,
@@ -9,13 +12,8 @@ import {
   getDailyFoodsPrompt,
 } from "../features/phr/PersonalHealthRecord";
 import { personalHealthRecordRepo } from "../features/phr/PersonalHealthRecordRepo";
-import { onSnapshot } from "firebase/firestore";
-import { Button } from "flowbite-react";
-import { httpsCallable } from "firebase/functions";
-import { functions, db } from "../firebase";
-import { setDoc, doc } from "firebase/firestore";
-import { DailyFoods } from "../features/foods/DailyFoods";
-import { DailyFood } from "../features/foods/DailyFood";
+import { usePersonalHealthRecord } from "../features/phr/usePersonalHealthRecord";
+import { db, functions } from "../firebase";
 
 type CompletionResult = {
   choices: {
@@ -25,20 +23,11 @@ type CompletionResult = {
 
 export const Welcome = () => {
   const user = useRequiredUser();
-  const [phr, setPhr] = useState<PersonalHealthRecord | null>(null);
-
-  useEffect(() => {
-    personalHealthRecordRepo.getByUserId(user.uid).then((phr) => {
-      if (phr) {
-        setPhr(phr);
-      }
-    });
-  }, []);
+  const { personalHealthRecord: phr } = usePersonalHealthRecord();
 
   const handleSubmit = (values: PersonalHealthRecord) => {
-    console.log("values", values);
+    console.log("add phr", values);
     personalHealthRecordRepo.add(user.uid, values);
-    setPhr(values);
   };
 
   const handleGetDailyFoods = () => {

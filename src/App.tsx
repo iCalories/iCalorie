@@ -5,8 +5,6 @@ import { Login } from "./pages/Login";
 import { UserProvider } from "./features/auth/UserContext";
 import { Welcome } from "./pages/Welcom";
 
-
-
 function App() {
   const [initialing, setInitialing] = useState(true);
   const [user, setUser] = useState<User>();
